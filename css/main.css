@@ -115,6 +115,11 @@
     padding: 8.3px 30px;
     cursor: pointer;
     color: var(--color-white);
+
+    &.disable {
+        opacity: .7;
+        pointer-events: none;
+    }
 }
 
 .iamges .card .details {

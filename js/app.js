@@ -25,11 +25,18 @@ const generateHTML = imagen => {
 };
 
 const getImages = apiUrl => {
+
+    loadMore.textContent = 'Cargando...';
+    loadMore.classList.add('disable');
+
     fetch(apiUrl, {
         headers: {
             Authorization: API_KEY
         }
     }).then(res => res.json().then(data => generateHTML(data.photos)));
+
+    loadMore.textContent = 'Load More';
+    loadMore.classList.remove('disable')
 };
 
 const loadMoreImg = () => {
