@@ -2,6 +2,7 @@
 
 :root {
     --color-white: #ffffff;
+    --color-primary: #1e90ff;
 }
 
 * {
@@ -60,13 +61,94 @@
     font-size: 1.3em;
 }
 
+:where(input, button, i) {
+
+    border: none;
+    outline: none;
+    border-radius: .5em;
+}
+
 .search-box input {
     width: 100%;
     height: 40px;
-    border: none;
     font-size: 1.1rem;
-    outline: none;
     font-family: "Lato", sans-serif;
     padding-left: 50px;
+}
+
+.gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gallery .iamges {
+    gap: 15px;
+    columns: 5 340px;
+    margin-top: 40px;
+    max-width: 95%;
+}
+
+.iamges .card {
+    list-style: none;
+    margin-bottom: 14px;
     border-radius: .5em;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    display: flex;
+
+    &:hover .details {
+        bottom: 0;
+    }
+}
+
+.iamges img {
+    width: 100%;
+}
+
+.gallery .load-more {
+    margin: 50px 0;
+    font-size: 1.2rem;
+    background-color: var(--color-primary);
+    padding: 8.3px 30px;
+    cursor: pointer;
+    color: var(--color-white);
+}
+
+.iamges .card .details {
+    position: absolute;
+    bottom: -100px;
+    padding: 15px 30px;
+    width: 100%;
+    transition: bottom 200ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background-image: linear-gradient(to top, hsla(0, 0%, 0%, 0.7), transparent);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.iamges .card .photograper {
+    color: var(--color-white);
+
+    display: flex;
+    align-items: center;
+}
+
+.iamges .card .photograper i {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.iamges .card .photograper span {
+    font-size: 1.05em;
+}
+
+.card .details button {
+    padding: 5px 8px;
+    font-size: 1.1rem;
+    background-color: var(--color-white);
+    cursor: pointer;
 }
