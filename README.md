@@ -1,3 +1,6 @@
+!![image](https://github.com/dizedesign/-46DayCode-Image-Search-Engine/assets/141795901/d0f31296-c724-4240-a9e9-6df1a2c48075)
+
+
 # 🖼️ Galería de Imágenes con Pexels API
 
 Este proyecto es una galería de imágenes interactiva que utiliza la API de Pexels para buscar y mostrar fotos de alta calidad. Los usuarios pueden buscar imágenes específicas, cargar más fotos y descargarlas directamente desde la interfaz.
