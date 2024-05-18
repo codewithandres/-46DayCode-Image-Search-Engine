@@ -171,7 +171,7 @@ i {
 
 .gallery .load-more {
     color: #fff;
-    background: #8A6CFF;
+    background: #0fbcf9;
     margin: 50px 0;
     font-size: 1.2rem;
     padding: 12px 27px;
@@ -183,7 +183,7 @@ i {
 }
 
 .gallery .load-more:hover {
-    background: #704dff;
+    background: #00d8d6;
 }
 
 .lightbox {
@@ -245,13 +245,13 @@ header .buttons i {
     font-size: 1.2rem;
     line-height: 40px;
     text-align: center;
-    background: #8A6CFF;
+    background: #0fbcf9;
     border-radius: 4px;
     transition: 0.2s ease;
 }
 
 header .buttons i:first-child:hover {
-    background: #704dff;
+    background: #00d8d6;
 }
 
 header .buttons i:last-child {
