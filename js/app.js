@@ -1,83 +1,95 @@
+const imageWrapper = document.querySelector(".images");
+const searchInput = document.querySelector(".search input");
+const loadMoreBtn = document.querySelector(".gallery .load-more");
+const lightbox = document.querySelector(".lightbox");
+const downloadImgBtn = lightbox.querySelector(".uil-import");
+const closeImgBtn = lightbox.querySelector(".close-icon");
 
-const imagesWrapper = document.querySelector('.iamges');
-const loadMore = document.querySelector('.load-more');
-const searchBox = document.querySelector('.search-box input');
+// API key, paginations, searchTerm variables
+const apiKey = "PASTE-YOUR-API-KEY";
+const perPage = 15;
+let currentPage = 1;
+let searchTerm = null;
 
-const API_KEY = 'jg9pkDr4VcyOsiQbMKNDKLFbRbrvJH3OG4NRFyqwxlCWdV2P8Guw4B9y';
+const downloadImg = (imgUrl) => {
+    // Converting received img to blob, creating its download link, & downloading it
+    fetch(imgUrl).then(res => res.blob()).then(blob => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = new Date().getTime();
+        a.click();
+    }).catch(() => alert("Failed to download image!"));
+}
 
-const PrePage = 15;
-let currenPage = 1;
-let searcTerm = null;
+const showLightbox = (name, img) => {
+    // Showing lightbox and setting img source, name and button attribute
+    lightbox.querySelector("img").src = img;
+    lightbox.querySelector("span").innerText = name;
+    downloadImgBtn.setAttribute("data-img", img);
+    lightbox.classList.add("show");
+    document.body.style.overflow = "hidden";
+}
 
-const generateHTML = imagen => {
-    imagesWrapper.innerHTML += imagen.map(img =>
+const hideLightbox = () => {
+    // Hiding lightbox on close icon click
+    lightbox.classList.remove("show");
+    document.body.style.overflow = "auto";
+}
 
+const generateHTML = (images) => {
+    // Making li of all fetched images and adding them to the existing image wrapper
+    imageWrapper.innerHTML += images.map(img =>
         `<li class="card">
-            <img src="${img.src.large2x}" alt="image">
-             <div class="details">
-                <div class="photograper">
-                   <i class="ri-camera-line"></i>
-                   <span>${img.photographer}</span>
+            <img onclick="showLightbox('${img.photographer}', '${img.src.large2x}')" src="${img.src.large2x}" alt="img">
+            <div class="details">
+                <div class="photographer">
+                    <i class="uil uil-camera"></i>
+                    <span>${img.photographer}</span>
                 </div>
-                   <button>
-                     <i class="ri-download-2-fill"></i>
-                   </button>
-                </div>
+                <button onclick="downloadImg('${img.src.large2x}');">
+                    <i class="uil uil-import"></i>
+                </button>
+            </div>
         </li>`
+    ).join("");
+}
 
-    ).join('');
-};
-
-const getImages = apiUrl => {
-
-    loadMore.textContent = 'Cargando...';
-    loadMore.classList.add('disable');
-
-    fetch(apiUrl, {
-        headers: {
-            Authorization: API_KEY
-        }
-    }).then(res => res.json().then(data => {
+const getImages = (apiURL) => {
+    // Fetching images by API call with authorization header
+    searchInput.blur();
+    loadMoreBtn.innerText = "Loading...";
+    loadMoreBtn.classList.add("disabled");
+    fetch(apiURL, {
+        headers: { Authorization: apiKey }
+    }).then(res => res.json()).then(data => {
         generateHTML(data.photos);
-        loadMore.textContent = 'Load More';
-        loadMore.classList.remove('disable');
-    })).catch(() => alert('Oops Tenemos un problemita Intenta de nuevo'));
+        loadMoreBtn.innerText = "Load More";
+        loadMoreBtn.classList.remove("disabled");
+    }).catch(() => alert("Failed to load images!"));
+}
 
-
-};
-
-const loadMoreImg = () => {
-    loadMore.textContent = 'Cargando...';
-    loadMore.classList.add('disable');
-
-    currenPage++;
-    let apiUrl = `https://api.pexels.com/v1/curated?page=${currenPage}&per_page=${PrePage}`
-
-    apiUrl = searcTerm ?
-        `https://api.pexels.com/v1/curated?page=${currenPage}&per_page=${PrePage}`
-        : apiUrl;
-
+const loadMoreImages = () => {
+    currentPage++; // Increment currentPage by 1
+    // If searchTerm has some value then call API with search term else call default API
+    let apiUrl = `https://api.pexels.com/v1/curated?page=${currentPage}&per_page=${perPage}`;
+    apiUrl = searchTerm ? `https://api.pexels.com/v1/search?query=${searchTerm}&page=${currentPage}&per_page=${perPage}` : apiUrl;
     getImages(apiUrl);
-};
+}
 
-const loadSearchImage = e => {
-    if (e.target.value === '') return searcTerm = null;
+const loadSearchImages = (e) => {
+    // If the search input is empty, set the search term to null and return from here
+    if (e.target.value === "") return searchTerm = null;
+    // If pressed key is Enter, update the current page, search term & call the getImages
+    if (e.key === "Enter") {
+        currentPage = 1;
+        searchTerm = e.target.value;
+        imageWrapper.innerHTML = "";
+        getImages(`https://api.pexels.com/v1/search?query=${searchTerm}&page=1&per_page=${perPage}`);
+    }
+}
 
-    if (e.key === 'Enter') {
-
-        currenPage = 1;
-        searcTerm = e.target.value;
-        imagesWrapper.innerHTML = '';
-
-        loadMore.textContent = 'Cargando...';
-        loadMore.classList.add('disable');
-
-        getImages(`https://api.pexels.com/v1/search?query=${searcTerm}&per_page=${PrePage}`)
-
-    };
-};
-
-getImages(`https://api.pexels.com/v1/curated?page=${currenPage}&per_page=${PrePage}`);
-
-loadMore.addEventListener('click', loadMoreImg);
-searchBox.addEventListener('keyup', loadSearchImage);
+getImages(`https://api.pexels.com/v1/curated?page=${currentPage}&per_page=${perPage}`);
+loadMoreBtn.addEventListener("click", loadMoreImages);
+searchInput.addEventListener("keyup", loadSearchImages);
+closeImgBtn.addEventListener("click", hideLightbox);
+downloadImgBtn.addEventListener("click", (e) => downloadImg(e.target.dataset.img));
