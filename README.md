@@ -1,4 +1,4 @@
-!![image](https://github.com/dizedesign/-46DayCode-Image-Search-Engine/assets/141795901/d0f31296-c724-4240-a9e9-6df1a2c48075)
+![image](https://github.com/dizedesign/-46DayCode-Image-Search-Engine/assets/141795901/d0f31296-c724-4240-a9e9-6df1a2c48075)
 
 
 # 🖼️ Galería de Imágenes con Pexels API
